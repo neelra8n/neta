@@ -11,13 +11,13 @@ NETA is a CLI tool that automates the testing workflow for Next.js (App Router) 
 ## Installation
 
 ```bash
-npm install -g neta
+npm install -g neta_cli
 ```
 
 Or run directly with `npx`:
 
 ```bash
-npx neta --help
+npx neta_cli --help
 ```
 
 ## Local Development
