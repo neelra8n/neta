@@ -10,6 +10,14 @@ export interface NetaConfig {
   llmModel: string;
   apiKey?: string;
   coverageThreshold?: number;
+  contextOptions?: {
+    maxExampleTests?: number;
+    maxExampleLength?: number;
+    includeFormatting?: boolean;
+    customConventions?: string[];
+  };
+  autoFormat?: boolean;
+  autoLint?: boolean;
 }
 
 export class ConfigManager {
@@ -20,20 +28,29 @@ export class ConfigManager {
   }
 
   loadConfig(): NetaConfig {
+    const defaults: NetaConfig = {
+      llmProvider: 'local',
+      llmModel: 'llama3',
+      coverageThreshold: 85,
+      autoFormat: true,
+      autoLint: true,
+      contextOptions: {
+        maxExampleTests: 2,
+        maxExampleLength: 2000,
+        includeFormatting: true,
+      },
+    };
+
     if (fs.existsSync(this.configPath)) {
       try {
-        return JSON.parse(fs.readFileSync(this.configPath, 'utf-8'));
+        const loaded = JSON.parse(fs.readFileSync(this.configPath, 'utf-8'));
+        return { ...defaults, ...loaded };
       } catch (error) {
         console.error(chalk.red('Failed to parse config file. Using defaults.'));
       }
     }
 
-    // Default config
-    return {
-      llmProvider: 'local',
-      llmModel: 'llama3',
-      coverageThreshold: 85,
-    };
+    return defaults;
   }
 
   async ensureConfig(): Promise<NetaConfig> {

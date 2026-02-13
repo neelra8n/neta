@@ -1,7 +1,8 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import packageJson from '../package.json' with { type: 'json' };
-import { Orchestrator } from './orchestrator.js';
+import { Orchestrator, OrchestratorOptions } from './orchestrator.js';
+import { NetaConfig } from './config/index.js';
 
 const program = new Command();
 
@@ -50,6 +51,9 @@ program
         e2e: options.e2e,
         dryRun: options.dryRun,
         llmConfig,
+        autoFormat: config.autoFormat,
+        autoLint: config.autoLint,
+        contextOptions: config.contextOptions,
       });
 
       await orchestrator.run();

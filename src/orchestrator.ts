@@ -1,5 +1,6 @@
 import { ProjectAnalyzer } from './analyzer/index.js';
 import { createLLMClient, LLMClient, LLMConfig } from './llm/client.js';
+import { NetaConfig } from './config/index.js';
 import { UnitTestGenerator } from './generators/unit.js';
 import { IntegrationTestGenerator } from './generators/integration.js';
 import { E2EGenerator } from './generators/e2e.js';
@@ -11,6 +12,9 @@ export interface OrchestratorOptions {
   e2e: boolean;
   dryRun: boolean;
   llmConfig: LLMConfig;
+  autoFormat?: boolean;
+  autoLint?: boolean;
+  contextOptions?: NetaConfig['contextOptions'];
 }
 
 export class Orchestrator {
@@ -57,7 +61,12 @@ export class Orchestrator {
       console.log(`Processing ${component.name} (${component.fileType})`);
 
       // Unit Tests
-      await this.unitGenerator.generate(component, { dryRun: this.options.dryRun });
+      await this.unitGenerator.generate(component, {
+        dryRun: this.options.dryRun,
+        autoFormat: this.options.autoFormat,
+        autoLint: this.options.autoLint,
+        contextOptions: this.options.contextOptions,
+      });
 
       // Integration Tests (if applicable)
       await this.integrationGenerator.generate(component, { dryRun: this.options.dryRun });
