@@ -1,5 +1,5 @@
 {
-    "name": "neta_01",
+    "name": "neta_cli",
     "version": "0.1.0",
     "type": "module",
     "description": "Next.js Exhaustive Testing Agent",
